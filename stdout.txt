@@ -1,0 +1,4 @@
+
+> @ test C:\users\hotfp\codenation\react-native-3
+> jest --env=jsdom
+
