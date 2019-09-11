@@ -1,7 +1,7 @@
 import React from "react";
 // import Profile from './src/screens/Profile';
-import Route from "./src/routes";
+import Router from "./src/routes";
 
-const App = () => <Route />;
+const App = () => <Router />;
 
 export default App;

@@ -10,7 +10,6 @@ import {
   Animated
 } from "react-native";
 
-
 const profile = {
   picture:
     "https://secure.gravatar.com/avatar/f50a9db56e231198af3507f10b5d5491?d=mm",

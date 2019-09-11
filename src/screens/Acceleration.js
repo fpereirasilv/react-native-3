@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 import AccelerationItem from "../components/AccelerationItem";
+import Details from "./Details";
 
 const accelerations = [
   {
@@ -100,9 +101,9 @@ const accelerations = [
 ];
 
 export default function Acceleration({ navigation }) {
-  // handleOpenProfile = () => {
-  //   navigation.navigate(Profile);
-  // };
+  handleOpenProfile = () => {
+    navigation.navigate("Profile");
+  };
 
   return (
     <View style={styles.container}>
@@ -114,14 +115,16 @@ export default function Acceleration({ navigation }) {
               "https://forum.codenation.com.br/uploads/default/original/2X/2/2d2d2a9469f0171e7df2c4ee97f70c555e431e76.png"
           }}
         />
-        <TouchableOpacity onPress={() => this.navigation.navigate("Profile")}>
+        <TouchableOpacity
+          onPress={this.handleOpenProfile}
+          className={"user-image-btn"}
+        >
           <Image
             style={styles.profileImage}
             source={{
               uri:
                 "https://secure.gravatar.com/avatar/f50a9db56e231198af3507f10b5d5491?d=mm"
             }}
-            className={"user-image-btn"}
           />
         </TouchableOpacity>
       </View>
@@ -129,7 +132,13 @@ export default function Acceleration({ navigation }) {
       <FlatList
         data={accelerations}
         keyExtractor={item => item.slug}
-        renderItem={({ item, index }) => <AccelerationItem item={item} />}
+        renderItem={({ item, index }) => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Details", { ...accelerations })}
+          >
+            <AccelerationItem item={item} className={"acceleration-item-btn"} />
+          </TouchableOpacity>
+        )}
       />
     </View>
   );
