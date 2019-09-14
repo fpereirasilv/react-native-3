@@ -1,7 +1,20 @@
-import React from "react";
-// import Profile from './src/screens/Profile';
-import Router from "./src/routes";
+import { createAppContainer, createStackNavigator } from "react-navigation";
 
-const App = () => <Router />;
+import Profile from "./src/screens/Profile";
+import Acceleration from "./src/screens/Acceleration";
+
+const StackRouterRoot = createStackNavigator(
+  {
+    Acceleration: Acceleration,
+    Profile: Profile
+  },
+  {
+    defaultNavigationOptions: {
+      header: null
+    }
+  }
+);
+
+const App = createAppContainer(StackRouterRoot);
 
 export default App;

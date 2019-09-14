@@ -1,15 +1,16 @@
-import React from "react";
+import React, { Component, useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Image,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal
 } from "react-native";
+import moment from "moment";
 
 import AccelerationItem from "../components/AccelerationItem";
-import Details from "./Details";
 
 const accelerations = [
   {
@@ -100,53 +101,113 @@ const accelerations = [
   }
 ];
 
-export default function Acceleration({ navigation }) {
-  handleOpenProfile = () => {
-    navigation.navigate("Profile");
-  };
+export default class Acceleration extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { isVisible: false };
+    this._showModal = this._showModal.bind(this);
+    this._hideModal = this._hideModal.bind(this);
+    detailsItems: null;
+  }
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+  _showModal(item) {
+    this.setState({ isVisible: true });
+    this.setItemsModal(item);
+  }
+
+  _hideModal() {
+    this.setState({ isVisible: false });
+  }
+
+  setItemsModal(item) {
+    this.setState({ detailsItems: item });
+  }
+
+  render() {
+    const navigation = this.props.navigation;
+    const item = this.state.detailsItems;
+    const modal = this.state.isVisible ? (
+      <Modal
+        style={styles.containerModal}
+        animationType={"slide"}
+        transparent={false}
+        Visible={this.state.isVisible}
+        onRequestClose={this._hideModal}
+        className="modal"
+      >
         <Image
-          style={styles.headerImage}
+          style={styles.itemImage}
           source={{
-            uri:
-              "https://forum.codenation.com.br/uploads/default/original/2X/2/2d2d2a9469f0171e7df2c4ee97f70c555e431e76.png"
+            uri: item.banner_url
+              ? item.banner_url
+              : "http://denrakaev.com/wp-content/uploads/2015/03/no-image.png"
           }}
         />
+        <View>
+          <Text style={styles.textTile}>{item.name}</Text>
+          <Text style={styles.textContainer}>Local: {item.location}</Text>
+          <Text style={styles.textContainer}>
+            Inscrição + desafio enviado até{" "}
+            {moment(item.subscription_finish_at).format("DD/MM/YYYY")}
+          </Text>
+        </View>
         <TouchableOpacity
-          onPress={this.handleOpenProfile}
-          className={"user-image-btn"}
+          style={styles.btnItem}
+          onPress={this._hideModal}
+          className="close-modal-btn"
         >
+          <Text style={styles.btnText}>FECHAR</Text>
+        </TouchableOpacity>
+      </Modal>
+    ) : null;
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
           <Image
-            style={styles.profileImage}
+            style={styles.headerImage}
             source={{
               uri:
-                "https://secure.gravatar.com/avatar/f50a9db56e231198af3507f10b5d5491?d=mm"
+                "https://forum.codenation.com.br/uploads/default/original/2X/2/2d2d2a9469f0171e7df2c4ee97f70c555e431e76.png"
             }}
           />
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.title}>Acelerações</Text>
-      <FlatList
-        data={accelerations}
-        keyExtractor={item => item.slug}
-        renderItem={({ item, index }) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate("Details", { ...accelerations })}
+            onPress={() => navigation.navigate("Profile")}
+            className={"user-image-btn"}
           >
-            <AccelerationItem item={item} className={"acceleration-item-btn"} />
+            <Image
+              style={styles.profileImage}
+              source={{
+                uri:
+                  "https://secure.gravatar.com/avatar/f50a9db56e231198af3507f10b5d5491?d=mm"
+              }}
+            />
           </TouchableOpacity>
-        )}
-      />
-    </View>
-  );
+        </View>
+        <Text style={styles.title}>Acelerações</Text>
+        <FlatList
+          data={accelerations}
+          keyExtractor={item => item.slug}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity
+              onPress={() => {
+                this._showModal(item);
+              }}
+              className="acceleration-item-btn"
+            >
+              <AccelerationItem item={item} />
+            </TouchableOpacity>
+          )}
+        />
+        {modal}
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
     backgroundColor: "#fff"
   },
   header: {
@@ -170,5 +231,46 @@ const styles = StyleSheet.create({
     color: "#7800ff",
     fontSize: 30,
     padding: 16
+  },
+  containerModal: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+    backgroundColor: "#FFF"
+  },
+  btnItem: {
+    backgroundColor: "#fff",
+    borderColor: "#7800ff",
+    borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+    marginLeft: 30,
+    paddingTop: 10,
+    width: 300,
+    height: 50
+  },
+  btnText: {
+    textAlign: "center",
+    paddingTop: 5
+  },
+  itemImage: {
+    height: 200,
+    width: 340,
+    margin: 10,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  textTile: {
+    fontSize: 22,
+    color: "#7800ff",
+    marginLeft: 30,
+    paddingTop: 5
+  },
+  textContainer: {
+    marginLeft: 30,
+    paddingTop: 10,
+    textAlign: "left"
   }
 });

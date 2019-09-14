@@ -1,7 +1,14 @@
 import React, { Component } from "react";
 
-import { View, Text, TouchableOpacity, StyleSheet, Modal } from "react-native";
-import Acceleration from "./Acceleration";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  Image
+} from "react-native";
+import moment from "moment";
 
 export default class Details extends Component {
   constructor() {
@@ -11,16 +18,16 @@ export default class Details extends Component {
     };
   }
 
-  // static navigationOptions = ({ navigation }) => {
-  //   const params = navigation.state.params || {};
-  // };
-
   toggleModal = () => {
     this.setState({ modalVisible: false });
   };
 
   render() {
-    // const item = [...accelerations];
+    const { navigation } = this.props;
+    const name = navigation.getParam("itemName");
+    const image = navigation.getParam("itemImage");
+    const local = navigation.getParam("itemLocal");
+    const finish_at = navigation.getParam("itemfinish");
     return (
       <Modal
         className={"modal"}
@@ -32,7 +39,24 @@ export default class Details extends Component {
         }}
       >
         <View style={styles.container}>
-          <Text>Teste</Text>
+          <Image
+            style={styles.itemImage}
+            source={{
+              uri: image
+                ? image
+                : "http://denrakaev.com/wp-content/uploads/2015/03/no-image.png"
+            }}
+          />
+          <View>
+            <Text style={styles.textTile}>{JSON.stringify(name)}</Text>
+            <Text style={styles.textContainer}>
+              Local: {JSON.stringify(local)}
+            </Text>
+            <Text style={styles.textContainer}>
+              Inscrição + desafio enviado até{" "}
+              {moment(finish_at).format("DD/MM/YYYY")}
+            </Text>
+          </View>
           <TouchableOpacity
             className={"close-modal-btn"}
             style={styles.btnItem}
@@ -40,7 +64,9 @@ export default class Details extends Component {
               this.props.navigation.goBack();
             }}
           >
-            <Text>FECHAR</Text>
+            <Text style={styles.btnText} className="close-modal-btn">
+              FECHAR
+            </Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -50,19 +76,36 @@ export default class Details extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     marginTop: 22,
     justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "center",
+    margin: 30,
     backgroundColor: "#FFF"
   },
   btnItem: {
-    height: 40,
-    width: 160,
-    borderRadius: 10,
-    backgroundColor: "yellow",
-    marginLeft: 50,
-    marginRight: 50,
-    marginTop: 20
+    backgroundColor: "#fff",
+    borderColor: "#7800ff",
+    borderWidth: 1,
+    paddingTop: 4,
+    paddingBottom: 4,
+    marginTop: 10,
+    width: 300,
+    height: 50
+  },
+  btnText: {
+    textAlign: "center",
+    paddingTop: 10
+  },
+  itemImage: {
+    height: 300,
+    width: 300
+  },
+  textTile: {
+    fontSize: 18,
+    color: "#7800ff"
+  },
+  textContainer: {
+    paddingTop: 5,
+    textAlign: "left"
   }
 });

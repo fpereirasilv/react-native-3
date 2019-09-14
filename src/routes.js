@@ -4,7 +4,7 @@ import Profile from "./screens/Profile";
 import Acceleration from "./screens/Acceleration";
 import Details from "./screens/Details";
 
-const Router = createAppContainer(
+const StackRouterRoot = createAppContainer(
   createStackNavigator(
     {
       Acceleration: Acceleration,
@@ -19,4 +19,4 @@ const Router = createAppContainer(
   )
 );
 
-export default Router;
+export default StackRouterRoot;

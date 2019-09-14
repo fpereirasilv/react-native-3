@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image } from "react-native";
 
 export default function AccelerationItem({ item }) {
   return (
-    <View style={styles.item}>
+    <View style={styles.item} className="acceleration-item-btn">
       <Image
         style={styles.itemImage}
         source={{
